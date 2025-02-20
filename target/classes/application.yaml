@@ -1,0 +1,10 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: back-end
+  data:
+    mongodb:
+      uri: mongodb+srv://sonbuithanh306:sonbuidatabase2708@cluster-database-mongod.fs2ls.mongodb.net/?retryWrites=true&w=majority&appName=Cluster-DataBase-MongoDB
+      database: database-app
