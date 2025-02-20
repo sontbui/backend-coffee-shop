@@ -1,13 +1,17 @@
 package com.project.back_end;
 
 import com.project.back_end.service.MongoDBConnectionService;
+
+import org.hibernate.cfg.Environment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
+@ComponentScan("com.project")
 public class BackEndApplication {
 
     @Autowired
@@ -21,7 +25,10 @@ public class BackEndApplication {
         // Check the MongoDB connection
         if (mongoDBConnectionService.checkConnection()) {
             // If the connection is successful, start the full application context
-            SpringApplication.run(BackEndApplication.class, args);
+            ApplicationContext context =  SpringApplication.run(BackEndApplication.class, args);
+			org.springframework.core.env.Environment env = context.getEnvironment();
+			String port = env.getProperty("server.port");
+			System.out.println("Application is running in " + port);
         } else {
             // If the connection fails, exit the application
             System.exit(1);
