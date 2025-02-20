@@ -1,0 +1,24 @@
+# Ignore Maven build files
+target/
+pom.xml
+pom.xml.*
+
+# Ignore IDE files
+*.iml
+*.ipr
+*.iws
+.idea/
+.vscode/
+
+# Ignore OS generated files
+.DS_Store
+Thumbs.db
+
+# Ignore logs
+*.log
+
+# Ignore temporary files
+tmp/
+temp/
+*.tmp
+*.swp
