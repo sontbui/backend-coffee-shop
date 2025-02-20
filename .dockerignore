@@ -1,8 +1,3 @@
-# Ignore Maven build files
-target/
-pom.xml
-pom.xml.*
-
 # Ignore IDE files
 *.iml
 *.ipr
