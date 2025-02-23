@@ -2,6 +2,8 @@ package com.project.back_end.dtos;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,6 +20,9 @@ import lombok.Setter;
 @Builder
 public class DescrioptionProductsDTO {
     
-    private String description_vi;
-    private String description_en;
+    @JsonProperty("vni")
+    private String description_vni;
+
+    @JsonProperty("eng")
+    private String description_eng;
 }

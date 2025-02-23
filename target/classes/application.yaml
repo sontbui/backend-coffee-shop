@@ -1,3 +1,5 @@
+#  ./mvnw clean package
+# ./mvnw spring-boot:run
 server:
   address: 0.0.0.0
   port: 8088

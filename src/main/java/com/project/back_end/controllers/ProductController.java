@@ -1,5 +1,7 @@
 package com.project.back_end.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.project.back_end.models.Product;
 import com.project.back_end.responses.ResponseObject;
 import com.project.back_end.responses.products.ProductResponse;
@@ -16,6 +18,8 @@ public class ProductController {
 
     private final IProductService productService;
 
+    ObjectMapper objectMapper = new ObjectMapper();
+    
     // Constructor injection
     public ProductController(IProductService productService) {
         this.productService = productService;
@@ -24,10 +28,11 @@ public class ProductController {
     // http://localhost:8088/api/v1/products/6
     @GetMapping("/{id}")
     public ResponseEntity<ResponseObject> getProductById(
-            @PathVariable("id") ObjectId productId
-    ) {
+            @PathVariable("id") ObjectId productId) {
         try {
+            objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
             Product existingProduct = productService.getProductById(productId);
+            System.out.println("Find product successfull: " + objectMapper.writeValueAsString(existingProduct));
             return ResponseEntity.ok(ResponseObject.builder()
                     .data(ProductResponse.fromProduct(existingProduct))
                     .message("Get detail product successfully")

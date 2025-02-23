@@ -1,47 +1,41 @@
 package com.project.back_end.models;
 
-import java.util.List;
-
+import lombok.Builder;
+import lombok.Data;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.project.back_end.dtos.DescrioptionProductsDTO;
+import java.util.List;
+import java.util.Map;
 
-import jakarta.validation.constraints.Size;
-import lombok.*;
-
-@Document(collection = "products") 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
+@Data
 @Builder
-public class Product {  
-    
+@Document(collection = "products")
+public class Product {
+
     @Id
     private ObjectId id;
+    private String name;
 
-    private String name; 
+    @Field("brand_id")
+    private String brandId;
+
+    @Field("category_id")
+    private String categoryId;
 
     private double price;
+    private Map<String, String> description;
 
-    @Size(min = 5, max = 200, message = "Image URLs must be between 5 and 200 characters")
-    @JsonProperty("image_urls")
-    private List<String> imageUrls; 
+    @Field("image_urls")
+    private List<String> imageUrls;
 
-    @JsonProperty("brand_id")
-    private String brandId; 
-
-    @JsonProperty("category_id")
-    private String categoryId; 
-
-    private DescriptionProduct description;
-
-    @JsonProperty("created_at")
+    @Field("created_at")
     private String createdAt;
 
-    @JsonProperty("created_at")
+    @Field("updated_at")
     private String updatedAt;
+
+    // Other fields and methods...
 }

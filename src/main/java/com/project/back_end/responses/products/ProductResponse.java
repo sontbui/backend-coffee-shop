@@ -25,7 +25,6 @@ public class ProductResponse {
     private String createdAt;
     private String updatedAt;
 
-
     @JsonProperty("image_urls")
     public List<String> getImageUrls() {
         return imageUrls;
@@ -33,6 +32,7 @@ public class ProductResponse {
 
     @JsonProperty("category_id")
     public static ProductResponse fromProduct(Product product) {
+        System.out.println("Mapping Product to Response: " + product);
         return ProductResponse.builder()
                 .id(product.getId())
                 .name(product.getName())
