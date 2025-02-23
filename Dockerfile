@@ -1,5 +1,6 @@
 # docker build -t back-end-app . -> need to run this command in the same directory as the Dockerfile
 # Use an official Maven image with OpenJDK as a parent image
+
 FROM maven:3.8.4-openjdk-17 AS build
 
 # Set the working directory in the container

@@ -1,6 +1,6 @@
 package com.project.back_end;
 
-import com.project.back_end.service.MongoDBConnectionService;
+import com.project.back_end.services.MongoDBConnectionService;
 
 import org.hibernate.cfg.Environment;
 import org.springframework.beans.factory.annotation.Autowired;
