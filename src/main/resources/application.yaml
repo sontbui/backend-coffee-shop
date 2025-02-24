@@ -11,11 +11,16 @@ spring:
     mongodb:
       uri: mongodb+srv://sonbuithanh306:sonbuidatabase2708@cluster-database-mongod.fs2ls.mongodb.net/?retryWrites=true&w=majority&appName=Cluster-DataBase-MongoDB
       database: database
+
 management:
   endpoints:
     web:
       exposure:
-        include: health,info, mappings
+        include: health,info,mappings
   endpoint:
     health:
       show-details: always
+
+jwt:
+  secret: L/wL4jvof6OEpsQcnvcprhW1rT0+m89GOo6v5lnZPcLZ5xR5qpO4Epwm51KSzpGUici20cpYmkYPbaJ65/jFLQ==
+  expiration: 3600

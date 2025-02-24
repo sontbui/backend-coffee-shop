@@ -8,20 +8,15 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-
 public interface ProductRepository extends MongoRepository<Product, String> {
 
-    // Lấy tất cả sản phẩm
     List<Product> findAll(); 
 
-    // Tìm sản phẩm theo Category ID
     List<Product> findByCategoryId(String categoryId);
 
-    // Tìm sản phẩm theo Brand ID
     List<Product> findByBrandId(String brandId);
 
-    // Lấy chi tiết sản phẩm theo ID
-    Optional<Product> findById(String id);
+    Optional<Product> findById(ObjectId productId);
 
     @Query("{ '_id': ?0 }")
     Optional<Product> getDetailProductById(ObjectId id);

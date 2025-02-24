@@ -2,6 +2,9 @@ package com.project.back_end.models;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -11,6 +14,8 @@ import java.util.List;
 import java.util.Map;
 
 @Data
+@Getter
+@Setter
 @Builder
 @Document(collection = "products")
 public class Product {

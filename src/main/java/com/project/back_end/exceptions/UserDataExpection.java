@@ -1,4 +1,4 @@
-package com.project.back_end.execptions;
+package com.project.back_end.exceptions;
 
 import java.util.concurrent.atomic.LongAdder;
 
