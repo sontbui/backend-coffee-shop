@@ -35,7 +35,6 @@ public class UserAccountController {
     }
 
     @PostMapping("/register")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ResponseObject> registerUser(@RequestBody UserAccountDTO userAccountDTO) {
         try {
             UserAccount newUser = userAccountService.createAccount(userAccountDTO);
