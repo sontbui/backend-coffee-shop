@@ -32,3 +32,4 @@ build/
 .vscode/
 
 .env
+run-spring-boot.sh
