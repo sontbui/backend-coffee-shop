@@ -126,4 +126,5 @@ public class UserAccountService implements IUserAccount {
                 .orElseThrow(() -> new Exception("User not found"));
         userAccountRepository.delete(existingUserAccount);
     }
+    
 }
