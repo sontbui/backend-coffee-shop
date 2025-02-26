@@ -2,6 +2,7 @@ package com.project.back_end;
 
 import com.project.back_end.services.MongoDBConnectionService;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import io.jsonwebtoken.security.Keys;
 
 import java.util.Base64;
@@ -23,6 +24,11 @@ public class BackEndApplication {
         SecretKey key = Keys.secretKeyFor(io.jsonwebtoken.SignatureAlgorithm.HS512);
         String base64Key = Base64.getEncoder().encodeToString(key.getEncoded());
         System.out.println("New JWT Secret Key: " + base64Key);
+        Dotenv dotenv = Dotenv.load();
+        System.setProperty("SERVER_PORT", dotenv.get("SERVER_PORT"));
+        System.setProperty("MONGO_URI", dotenv.get("MONGO_URI"));
+        System.setProperty("MONGO_DATABASE", dotenv.get("MONGO_DATABASE"));
+        System.setProperty("JWT_SECRET", dotenv.get("JWT_SECRET"));
         SpringApplication.run(BackEndApplication.class, args);
     }
 }

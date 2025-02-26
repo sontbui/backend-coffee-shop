@@ -1,3 +1,4 @@
+com/project/back_end/configurations/SecurityConfig$CustomJwtFilter.class
 com/project/back_end/responses/products/ProductResponse.class
 com/project/back_end/repositories/UserAccountRepository.class
 com/project/back_end/services/users/UserAccountService.class
