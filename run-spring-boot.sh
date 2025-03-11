@@ -2,7 +2,7 @@
 
 export SERVER_PORT=8088
 export MONGO_URI="mongodb+srv://sonbuithanh306:sonbuidatabase2708@cluster-database-mongod.fs2ls.mongodb.net/?retryWrites=true&w=majority&appName=Cluster-DataBase-MongoDB"
-export MONGO_DATABASE=database
+export MONGO_DATABASE=movie-database
 export CLOUDINARY_CLOUD_NAME=your_cloud_name
 export CLOUDINARY_API_KEY=your_api_key
 export CLOUDINARY_API_SECRET=your_api_secret
