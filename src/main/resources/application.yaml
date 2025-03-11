@@ -2,15 +2,15 @@
 # ./mvnw spring-boot:run
 server:
   address: 0.0.0.0
-  port: 8088
+  port: ${SERVER_PORT:8080}
 
 spring:
   application:
     name: back-end
   data:
     mongodb:
-      uri: mongodb+srv://sonbuithanh306:sonbuidatabase2708@cluster-database-mongod.fs2ls.mongodb.net/?retryWrites=true&w=majority&appName=Cluster-DataBase-MongoDB
-      database: database
+      uri: ${MONGO_URI}
+      database: ${MONGO_DATABASE}
 
 management:
   endpoints:
@@ -22,5 +22,5 @@ management:
       show-details: always
 
 jwt:
-  secret: L/wL4jvof6OEpsQcnvcprhW1rT0+m89GOo6v5lnZPcLZ5xR5qpO4Epwm51KSzpGUici20cpYmkYPbaJ65/jFLQ==
-  expiration: 3600
+  secret: ${JWT_SECRET}
+  expiration: ${JWT_EXPIRATION_TIME:3600000}
