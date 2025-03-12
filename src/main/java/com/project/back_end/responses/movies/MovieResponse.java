@@ -6,6 +6,7 @@ import java.util.Map;
 import org.bson.types.ObjectId;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.project.back_end.models.Character;
 import com.project.back_end.models.Movie;
 
@@ -20,7 +21,11 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+
 public class MovieResponse {
+    private static final String DEFAULT_POSTER = "https://res.cloudinary.com/dzw7jd4hi/image/upload/v1741692320/movie_images/ujsqtq50etoyvxttyv7f.jpg";
+    @JsonProperty("_id")
+    @JsonSerialize
     private ObjectId id;
     private Map<String, String> title;
     private List<String> genre;
@@ -34,16 +39,17 @@ public class MovieResponse {
 
     public static MovieResponse fromMovie(Movie movie) {
         return MovieResponse.builder()
-            .id(movie.getId())
-            .title(movie.getTitle())
-            .genre(movie.getGenres())
-            .duration(movie.getDuration())
-            .posterUrl(movie.getPosterUrl())
-            .description(movie.getDescription())
-            .releaseDate(movie.getReleaseDate().toString())
-            .characters(movie.getCharacters())
-            .createdAt(movie.getCreatedAt().toString())
-            .updatedAt(movie.getUpdatedAt().toString())
-            .build();
+                .id(movie.getId())
+                .title(movie.getTitle())
+                .genre(movie.getGenres())
+                .duration(movie.getDuration())
+                .posterUrl(movie.getPosterUrl() != null && !movie.getPosterUrl().isEmpty() ? movie.getPosterUrl()
+                        : DEFAULT_POSTER)
+                .description(movie.getDescription())
+                .releaseDate(movie.getReleaseDate().toString())
+                .characters(movie.getCharacters())
+                .createdAt(movie.getCreatedAt().toString())
+                .updatedAt(movie.getUpdatedAt().toString())
+                .build();
     }
 }
