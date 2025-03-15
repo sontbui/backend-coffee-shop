@@ -16,14 +16,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Document(collection = "user_accounts")
+@Document(collection = "users")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
 @Getter
 @Builder
-public class UserAccount {
+public class User {
     
     @Id
     private ObjectId id;

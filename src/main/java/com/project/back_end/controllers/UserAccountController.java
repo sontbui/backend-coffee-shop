@@ -1,7 +1,7 @@
 package com.project.back_end.controllers;
 
-import com.project.back_end.dtos.UserAccountDTO;
-import com.project.back_end.models.UserAccount;
+import com.project.back_end.dtos.UserDTO;
+import com.project.back_end.models.User;
 import com.project.back_end.responses.ResponseObject;
 import com.project.back_end.services.users.IUserAccount;
 import org.bson.types.ObjectId;
@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -30,14 +32,14 @@ public class UserAccountController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public UserAccount getUserById(@PathVariable ObjectId id) throws Exception {
+    public User getUserById(@PathVariable ObjectId id) throws Exception {
         return userAccountService.getUserById(id);
     }
 
     @PostMapping("/register")
-    public ResponseEntity<ResponseObject> registerUser(@RequestBody UserAccountDTO userAccountDTO) {
+    public ResponseEntity<ResponseObject> registerUser(@RequestBody UserDTO userAccountDTO) {
         try {
-            UserAccount newUser = userAccountService.createAccount(userAccountDTO);
+            User newUser = userAccountService.createAccount(userAccountDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body(ResponseObject.builder()
                     .data(newUser)
                     .message("User registered successfully")
@@ -52,10 +54,10 @@ public class UserAccountController {
     }
 
     @PostMapping("/login/phone")
-    public ResponseEntity<ResponseObject> loginByPhoneNumber(@RequestParam String phone_number,
+    public ResponseEntity<ResponseObject> loginByPhoneNumber(@RequestParam String phonenumber,
             @RequestParam String password) {
         try {
-            String token = userAccountService.loginByPhoneNumber(phone_number, password);
+            String token = userAccountService.loginByPhoneNumber(phonenumber, password);
             return ResponseEntity.ok(ResponseObject.builder()
                     .data(token)
                     .message("Login successful")
@@ -90,7 +92,7 @@ public class UserAccountController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ResponseObject> getUserAccountFromToken(@RequestParam String token) {
         try {
-            UserAccount userAccount = userAccountService.getUserAccountFromToken(token);
+            User userAccount = userAccountService.getUserAccountFromToken(token);
             return ResponseEntity.ok(ResponseObject.builder()
                     .data(userAccount)
                     .message("User account retrieved successfully")
@@ -107,9 +109,9 @@ public class UserAccountController {
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ResponseObject> updateUserAccount(@PathVariable("id") ObjectId id,
-            @RequestBody UserAccountDTO userAccountDTO) {
+            @RequestBody UserDTO userAccountDTO) {
         try {
-            UserAccount updatedUser = userAccountService.updateUserAccount(id, userAccountDTO);
+            User updatedUser = userAccountService.updateUserAccount(id, userAccountDTO);
             return ResponseEntity.ok(ResponseObject.builder()
                     .data(updatedUser)
                     .message("User account updated successfully")
@@ -126,8 +128,12 @@ public class UserAccountController {
     @PutMapping("/reset-password/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ResponseObject> resetPassword(@PathVariable("id") ObjectId id,
-            @RequestParam String newPassword) {
+            @RequestBody Map<String, String> request) {
         try {
+            String newPassword = request.get("newPassword");
+            if (newPassword == null) {
+                throw new IllegalArgumentException("newPassword cannot be null");
+            }
             userAccountService.resetPassword(id, newPassword);
             return ResponseEntity.ok(ResponseObject.builder()
                     .message("Password reset successfully")

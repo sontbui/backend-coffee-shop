@@ -16,14 +16,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Document(collection = "user_accounts")
+@Document(collection = "users")
 @Data
 @Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserAccountDTO {
+public class UserDTO {
     
     @JsonProperty("_id")
     private ObjectId id;

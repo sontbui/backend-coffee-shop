@@ -1,6 +1,6 @@
 package com.project.back_end.utils;
 
-import com.project.back_end.models.UserAccount;
+import com.project.back_end.models.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -32,7 +32,7 @@ public class JwtTokenUtil {
 
    
 
-    public String generateToken(UserAccount userAccount) {
+    public String generateToken(User userAccount) {
         return Jwts.builder()
                 .setSubject(userAccount.getEmail())
                 .claim("role", userAccount.getRole())
@@ -59,7 +59,7 @@ public class JwtTokenUtil {
                 .getBody();
     }
 
-    public Boolean validateToken(String token, UserAccount userAccount) {
+    public Boolean validateToken(String token, User userAccount) {
         final String username = getUsernameFromToken(token);
         return (username.equals(userAccount.getEmail()) && !isTokenExpired(token));
     }

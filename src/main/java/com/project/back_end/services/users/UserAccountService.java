@@ -1,8 +1,8 @@
 package com.project.back_end.services.users;
 
-import com.project.back_end.dtos.UserAccountDTO;
-import com.project.back_end.models.UserAccount;
-import com.project.back_end.repositories.UserAccountRepository;
+import com.project.back_end.dtos.UserDTO;
+import com.project.back_end.models.User;
+import com.project.back_end.repositories.UserRepository;
 import com.project.back_end.responses.ResponseObject;
 import com.project.back_end.utils.JwtTokenUtil;
 import org.bson.types.ObjectId;
@@ -21,12 +21,12 @@ import java.util.Optional;
 @Service
 public class UserAccountService implements IUserAccount {
 
-    private final UserAccountRepository userAccountRepository;
+    private final UserRepository userAccountRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenUtil jwtTokenUtil;
 
     @Autowired
-    public UserAccountService(UserAccountRepository userAccountRepository, PasswordEncoder passwordEncoder,
+    public UserAccountService(UserRepository userAccountRepository, PasswordEncoder passwordEncoder,
             JwtTokenUtil jwtTokenUtil) {
         this.userAccountRepository = userAccountRepository;
         this.passwordEncoder = passwordEncoder;
@@ -34,7 +34,7 @@ public class UserAccountService implements IUserAccount {
     }
 
     @Override
-    public UserAccount createAccount(UserAccountDTO userAccountDTO) throws Exception {
+    public User createAccount(UserDTO userAccountDTO) throws Exception {
         if (userAccountRepository.existsByEmail(userAccountDTO.getEmail())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User with this email already exists");
         }
@@ -43,7 +43,7 @@ public class UserAccountService implements IUserAccount {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "User with this phone number already exists" + userAccountDTO.getPhoneNumber());
         }
-        UserAccount userAccount = UserAccount.builder()
+        User userAccount = User.builder()
                 .email(userAccountDTO.getEmail())
                 .phoneNumber(userAccountDTO.getPhoneNumber())
                 .password(passwordEncoder.encode(userAccountDTO.getPassword()))
@@ -57,7 +57,7 @@ public class UserAccountService implements IUserAccount {
 
     @Override
     public String loginByPhoneNumber(String phoneNumber, String password) throws Exception {
-        Optional<UserAccount> userAccountOptional = userAccountRepository.findByPhoneNumber(phoneNumber);
+        Optional<User> userAccountOptional = userAccountRepository.findByPhoneNumber(phoneNumber);
         if (userAccountOptional.isEmpty()
                 || !passwordEncoder.matches(password, userAccountOptional.get().getPassword())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid phone number, password");
@@ -67,7 +67,7 @@ public class UserAccountService implements IUserAccount {
 
     @Override
     public String loginByEmail(String email, String password) throws Exception {
-        Optional<UserAccount> userAccountOptional = userAccountRepository.findByEmail(email);
+        Optional<User> userAccountOptional = userAccountRepository.findByEmail(email);
         if (userAccountOptional.isEmpty()
                 || !passwordEncoder.matches(password, userAccountOptional.get().getPassword())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid email, password");
@@ -76,20 +76,20 @@ public class UserAccountService implements IUserAccount {
     }
 
     @Override
-    public UserAccount getUserAccountFromToken(String token) throws Exception {
+    public User getUserAccountFromToken(String token) throws Exception {
         String email = jwtTokenUtil.getUsernameFromToken(token);
         return userAccountRepository.findByEmail(email).orElseThrow(() -> new Exception("User not found"));
     }
 
     @Override
-    public UserAccount getUserAccountFromRefreshToken(String token) throws Exception {
+    public User getUserAccountFromRefreshToken(String token) throws Exception {
         String email = jwtTokenUtil.getUsernameFromToken(token);
         return userAccountRepository.findByEmail(email).orElseThrow(() -> new Exception("User not found"));
     }
 
     @Override
-    public UserAccount updateUserAccount(ObjectId id, UserAccountDTO userAccountDTO) throws Exception {
-        UserAccount existingUserAccount = userAccountRepository.findById(id)
+    public User updateUserAccount(ObjectId id, UserDTO userAccountDTO) throws Exception {
+        User existingUserAccount = userAccountRepository.findById(id)
                 .orElseThrow(() -> new Exception("User not found"));
         existingUserAccount.setEmail(userAccountDTO.getEmail());
         existingUserAccount.setPhoneNumber(userAccountDTO.getPhoneNumber());
@@ -100,7 +100,7 @@ public class UserAccountService implements IUserAccount {
 
     @Override
     public void resetPassword(ObjectId id, String newPassword) throws Exception {
-        UserAccount existingUserAccount = userAccountRepository.findById(id.toString())
+        User existingUserAccount = userAccountRepository.findById(id.toString())
                 .orElseThrow(() -> new Exception("User not found"));
         existingUserAccount.setPassword(passwordEncoder.encode(newPassword));
         userAccountRepository.save(existingUserAccount);
@@ -108,21 +108,21 @@ public class UserAccountService implements IUserAccount {
 
     @Override
     public void blockOrEnbleAccount(ObjectId id, boolean isActive) throws Exception {
-        UserAccount existingUserAccount = userAccountRepository.findById(id.toString())
+        User existingUserAccount = userAccountRepository.findById(id.toString())
                 .orElseThrow(() -> new Exception("User not found"));
         existingUserAccount.setActive(isActive);
         userAccountRepository.save(existingUserAccount);
     }
 
     @Override
-    public UserAccount getUserById(ObjectId id) {
+    public User getUserById(ObjectId id) {
         return userAccountRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found with ID: " + id));
     }
 
     @Override
     public void deleteUserAccount(ObjectId id) throws Exception {
-        UserAccount existingUserAccount = userAccountRepository.findById(id.toString())
+        User existingUserAccount = userAccountRepository.findById(id.toString())
                 .orElseThrow(() -> new Exception("User not found"));
         userAccountRepository.delete(existingUserAccount);
     }
