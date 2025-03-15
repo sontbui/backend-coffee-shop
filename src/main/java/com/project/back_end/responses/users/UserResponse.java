@@ -18,7 +18,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserAccountResponse {
+public class UserResponse {
     
     private ObjectId id;
 
@@ -42,9 +42,9 @@ public class UserAccountResponse {
 
     private String token;
 
-    public static UserAccountResponse fromUserAccount(UserAccountResponse userAccount) {
+    public static UserResponse fromUserAccount(UserResponse userAccount) {
         System.out.println("Mapping UserAccount to Response: " + userAccount);
-        return UserAccountResponse.builder()
+        return UserResponse.builder()
                 .id(userAccount.getId())
                 .phoneNumber(userAccount.getPhoneNumber())
                 .email(userAccount.getEmail())
