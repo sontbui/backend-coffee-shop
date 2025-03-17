@@ -1,6 +1,5 @@
 package com.project.back_end.dtos;
 
-import java.util.List;
 import java.util.Map;
 
 import org.bson.types.ObjectId;
@@ -8,40 +7,35 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.Builder;
+import lombok.ToString;
 
-@Setter
+@Document(collection = "categories")
+@Data
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Document(collection = "movies")
-public class MovieDTO {
+@ToString
+public class CategoryDTO {
     
-
     @JsonProperty("_id")
-    private ObjectId    id;
+    private ObjectId id;
 
-    @JsonProperty("title")
-    private Map<String, String> title;
+    @NotNull(message = "Category type is required")
+    private String type;
 
-    @JsonProperty("genre")
-    private List<String> genre;
-
-    private int duration;
-
-    private String posterUrl;
-
-    private Map<String, String> description;
-
-    private String releaseDate;
-
-    private List<Character> characters;
+    @NotNull(message = "Category name is required")
+    private Map<String,String> name;
 
     private String createdAt;
+
     private String updatedAt;
 }

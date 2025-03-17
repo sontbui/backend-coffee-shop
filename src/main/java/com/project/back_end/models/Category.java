@@ -1,49 +1,42 @@
 package com.project.back_end.models;
 
+import java.util.Map;
+
 import org.bson.types.ObjectId;
+
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Document(collection = "users")
+@Document(collection = "categories")
 @Data
-@NoArgsConstructor
+@Getter 
+@Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class User {
-
+public class Category {
+    
     @org.springframework.data.annotation.Id
-    @Field("_id")
+    @Field("_id")   
     private ObjectId id;
 
+    @NotNull(message = "Category type is required")
+    @Field("type")
+    private String type;
+
+    @NotNull(message = "Category type is required")
     @Field("name")
-    private String fullName;
+    private Map<String,String> name; 
 
-    @Field("phone")
-    private String phoneNumber;
-
-    @Field("email")
-    private String email;
-
-    private String address;
-
-    @Field("password")
-    private String password;
-
-    private int point;
-
-    private String role;
-
-    @Field("createdAt")
     private String createdAt;
 
-    @Field("updatedAt")
     private String updatedAt;
-
-    @Field("is_active")
-    private boolean isActive;
 }
