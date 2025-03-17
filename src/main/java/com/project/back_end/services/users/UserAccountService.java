@@ -3,16 +3,12 @@ package com.project.back_end.services.users;
 import com.project.back_end.dtos.UserDTO;
 import com.project.back_end.models.User;
 import com.project.back_end.repositories.UserRepository;
-import com.project.back_end.responses.ResponseObject;
 import com.project.back_end.utils.JwtTokenUtil;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Instant;

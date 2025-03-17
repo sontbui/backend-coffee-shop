@@ -1,12 +1,9 @@
 package com.project.back_end.services.users;
 
 import org.bson.types.ObjectId;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestParam;
-
 import com.project.back_end.dtos.UserDTO;
 import com.project.back_end.models.User;
-import com.project.back_end.responses.ResponseObject;
+
 
 public interface IUserAccount {
     

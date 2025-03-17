@@ -21,7 +21,7 @@ public class MongoDBConnectionService {
         try (MongoClient mongoClient = MongoClients.create(mongoUri)) {
             MongoDatabase databases = mongoClient.getDatabase(databaseName);
             if (databases != null) {
-                MongoIterable<String> databasess = mongoClient.listDatabaseNames();
+    
                 System.out.println("Successfully connected to the database: " + databaseName);
                 MongoDatabase database = mongoClient.getDatabase(databaseName);
                 MongoIterable<String> collections = database.listCollectionNames();
