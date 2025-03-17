@@ -126,7 +126,6 @@ public class UserAccountController {
     }
 
     @PutMapping("/reset-password/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ResponseObject> resetPassword(@PathVariable("id") ObjectId id,
             @RequestBody Map<String, String> request) {
         try {
@@ -137,6 +136,7 @@ public class UserAccountController {
             userAccountService.resetPassword(id, newPassword);
             return ResponseEntity.ok(ResponseObject.builder()
                     .message("Password reset successfully")
+                    .data(userAccountService.getUserById(id))
                     .status(HttpStatus.OK.toString())
                     .build());
         } catch (Exception e) {
@@ -148,7 +148,6 @@ public class UserAccountController {
     }
 
     @PutMapping("/block/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ResponseObject> blockOrEnableAccount(@PathVariable("id") ObjectId id,
             @RequestParam boolean is_active) {
         try {
@@ -156,6 +155,7 @@ public class UserAccountController {
             return ResponseEntity.ok(ResponseObject.builder()
                     .message(is_active ? "Account enabled successfully" : "Account blocked successfully")
                     .status(HttpStatus.OK.toString())
+                    .data(userAccountService.getUserById(id))
                     .build());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseObject.builder()
@@ -169,9 +169,11 @@ public class UserAccountController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ResponseObject> deleteUserAccount(@PathVariable("id") ObjectId id) {
         try {
+            User userDelete = userAccountService.getUserById(id);
             userAccountService.deleteUserAccount(id);
             return ResponseEntity.ok(ResponseObject.builder()
                     .message("User account deleted successfully")
+                    .data(userDelete)
                     .status(HttpStatus.OK.toString())
                     .build());
         } catch (Exception e) {

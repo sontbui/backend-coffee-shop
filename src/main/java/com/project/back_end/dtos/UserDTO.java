@@ -28,23 +28,27 @@ public class UserDTO {
     @JsonProperty("_id")
     private ObjectId id;
 
-    @Field("phone_number")
-    @JsonProperty("phone_number")
+    @Field("name")
+    private String fullName;
+
+
+    @Field("phone")
+    @JsonProperty("phone")
     @NotBlank(message = "Phone number is required")
     @Size(min = 10, max = 10, message = "Phone number must be 10 characters")
     private String phoneNumber;
 
-    @JsonProperty
     @Email(message = "Email should be valid")
     private String email;
 
-    @JsonProperty
+    private String address;
+
     private String password;
 
-    @JsonProperty 
+    private String point;
+
     private String role;
 
-    @JsonProperty
     @Field("is_active")
     private boolean isActive;
 

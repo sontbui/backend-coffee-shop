@@ -4,51 +4,45 @@ import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Document(collection = "users")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Setter
-@Getter
 @Builder
 public class User {
-    
-    @Id
+
+    @org.springframework.data.annotation.Id
     private ObjectId id;
 
-    @JsonProperty("phone_number")   
-    @Field("phone_number")
-    private String phoneNumber;
-;
+    @Field("name")
+    private String fullName;
 
+    @Field("phone")
+    private String phoneNumber;
+
+    @Field("email")
     private String email;
+
+    private String address;
 
     @Field("password")
     private String password;
 
-    @Field("role")
+    private int point;
+
     private String role;
+
+    @Field("createdAt")
+    private String createdAt;
+
+    @Field("updatedAt")
+    private String updatedAt;
 
     @Field("is_active")
     private boolean isActive;
-
-    @Field("created_at")
-    private String createdAt;
-
-    @Field("updated_at")
-    private String updatedAt;
-
-
 }

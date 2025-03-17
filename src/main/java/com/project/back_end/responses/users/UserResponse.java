@@ -22,22 +22,29 @@ public class UserResponse {
     
     private ObjectId id;
 
-    @Field("phone_number")
+    @Field("name") //
+    private String fullName;
+
+    @Field("phone")
     private String phoneNumber;
 
     @Field("email")
     private String email;
 
+    private String address;
+
     private String password;
+
+    private int point;
 
     private String role;
 
     @Field("is_active")
     private boolean isActive;
 
-    @Field("created_at")
+    @Field("createdAt")
     private String createdAt;
-    @Field("updated_at")
+    @Field("updatedAt")
     private String updated_at;
 
     private String token;

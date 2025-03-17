@@ -44,9 +44,12 @@ public class UserAccountService implements IUserAccount {
                     "User with this phone number already exists" + userAccountDTO.getPhoneNumber());
         }
         User userAccount = User.builder()
+                .fullName(userAccountDTO.getFullName())
                 .email(userAccountDTO.getEmail())
                 .phoneNumber(userAccountDTO.getPhoneNumber())
+                .address(userAccountDTO.getAddress())
                 .password(passwordEncoder.encode(userAccountDTO.getPassword()))
+                .point(0)
                 .role(userAccountDTO.getRole())
                 .createdAt(Instant.now().toString())
                 .updatedAt(Instant.now().toString())
@@ -91,10 +94,16 @@ public class UserAccountService implements IUserAccount {
     public User updateUserAccount(ObjectId id, UserDTO userAccountDTO) throws Exception {
         User existingUserAccount = userAccountRepository.findById(id)
                 .orElseThrow(() -> new Exception("User not found"));
+        existingUserAccount.setFullName(userAccountDTO.getFullName());
+        existingUserAccount.setAddress(userAccountDTO.getAddress());
         existingUserAccount.setEmail(userAccountDTO.getEmail());
         existingUserAccount.setPhoneNumber(userAccountDTO.getPhoneNumber());
         existingUserAccount.setPassword(passwordEncoder.encode(userAccountDTO.getPassword()));
         existingUserAccount.setRole(userAccountDTO.getRole());
+        existingUserAccount.setActive(userAccountDTO.isActive());
+        existingUserAccount.setCreatedAt(existingUserAccount.getCreatedAt());
+        existingUserAccount.setPoint(existingUserAccount.getPoint());
+        existingUserAccount.setUpdatedAt(Instant.now().toString());
         return userAccountRepository.save(existingUserAccount);
     }
 
@@ -102,7 +111,9 @@ public class UserAccountService implements IUserAccount {
     public void resetPassword(ObjectId id, String newPassword) throws Exception {
         User existingUserAccount = userAccountRepository.findById(id.toString())
                 .orElseThrow(() -> new Exception("User not found"));
+        System.out.println("Existing User: " + existingUserAccount);
         existingUserAccount.setPassword(passwordEncoder.encode(newPassword));
+        existingUserAccount.setUpdatedAt(Instant.now().toString());
         userAccountRepository.save(existingUserAccount);
     }
 
@@ -126,5 +137,5 @@ public class UserAccountService implements IUserAccount {
                 .orElseThrow(() -> new Exception("User not found"));
         userAccountRepository.delete(existingUserAccount);
     }
-    
+
 }
