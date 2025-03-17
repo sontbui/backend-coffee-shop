@@ -1,4 +1,5 @@
 /Users/sontbui/Documents/workspace/kotlin/back-end/src/main/java/com/project/back_end/BackEndApplication.java
+/Users/sontbui/Documents/workspace/kotlin/back-end/src/main/java/com/project/back_end/configurations/OpenAPIConfig.java
 /Users/sontbui/Documents/workspace/kotlin/back-end/src/main/java/com/project/back_end/configurations/SecurityConfig.java
 /Users/sontbui/Documents/workspace/kotlin/back-end/src/main/java/com/project/back_end/controllers/UserAccountController.java
 /Users/sontbui/Documents/workspace/kotlin/back-end/src/main/java/com/project/back_end/dtos/MovieDTO.java
@@ -13,3 +14,4 @@
 /Users/sontbui/Documents/workspace/kotlin/back-end/src/main/java/com/project/back_end/services/users/IUserAccount.java
 /Users/sontbui/Documents/workspace/kotlin/back-end/src/main/java/com/project/back_end/services/users/UserAccountService.java
 /Users/sontbui/Documents/workspace/kotlin/back-end/src/main/java/com/project/back_end/utils/JwtTokenUtil.java
+/Users/sontbui/Documents/workspace/kotlin/back-end/src/main/java/com/project/back_end/utils/OpenAPIConfig.java
