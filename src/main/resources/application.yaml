@@ -11,7 +11,13 @@ spring:
     mongodb:
       uri: ${MONGO_URI}
       database: ${MONGO_DATABASE}
-
+      
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true
+    
 management:
   endpoints:
     web:

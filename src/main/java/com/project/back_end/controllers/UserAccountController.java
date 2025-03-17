@@ -4,6 +4,10 @@ import com.project.back_end.dtos.UserDTO;
 import com.project.back_end.models.User;
 import com.project.back_end.responses.ResponseObject;
 import com.project.back_end.services.users.IUserAccount;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +19,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/users")
+@Tag(name = "User", description = "User management APIs")
 public class UserAccountController {
 
     private final IUserAccount userAccountService;
@@ -32,11 +37,13 @@ public class UserAccountController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
+     @Operation(summary = "Get user by ID users", description = "Retrieve users by ID from database")
     public User getUserById(@PathVariable ObjectId id) throws Exception {
         return userAccountService.getUserById(id);
     }
 
     @PostMapping("/register")
+    @Operation(summary = "Register new User", description = "Sign up new user account")
     public ResponseEntity<ResponseObject> registerUser(@RequestBody UserDTO userAccountDTO) {
         try {
             User newUser = userAccountService.createAccount(userAccountDTO);
@@ -54,6 +61,7 @@ public class UserAccountController {
     }
 
     @PostMapping("/login/phone")
+    @Operation(summary = "Login by phone number", description = "Login by phone number and password")
     public ResponseEntity<ResponseObject> loginByPhoneNumber(@RequestParam String phonenumber,
             @RequestParam String password) {
         try {
@@ -72,6 +80,7 @@ public class UserAccountController {
     }
 
     @PostMapping("/login/email")
+    @Operation(summary = "Login by email", description = "Login by email and password")
     public ResponseEntity<ResponseObject> loginByEmail(@RequestParam String email, @RequestParam String password) {
         try {
             String token = userAccountService.loginByEmail(email, password);
@@ -90,6 +99,7 @@ public class UserAccountController {
 
     @GetMapping("/account")
     @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Get user account from token", description = "Retrieve user account from token")
     public ResponseEntity<ResponseObject> getUserAccountFromToken(@RequestParam String token) {
         try {
             User userAccount = userAccountService.getUserAccountFromToken(token);
@@ -108,6 +118,7 @@ public class UserAccountController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Update user account", description = "Update user account by ID")
     public ResponseEntity<ResponseObject> updateUserAccount(@PathVariable("id") ObjectId id,
             @RequestBody UserDTO userAccountDTO) {
         try {
@@ -126,6 +137,7 @@ public class UserAccountController {
     }
 
     @PutMapping("/reset-password/{id}")
+    @Operation(summary = "Reset password", description = "Reset password by ID")
     public ResponseEntity<ResponseObject> resetPassword(@PathVariable("id") ObjectId id,
             @RequestBody Map<String, String> request) {
         try {
@@ -148,6 +160,8 @@ public class UserAccountController {
     }
 
     @PutMapping("/block/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Block or enable account", description = "Block or enable account by ID")  
     public ResponseEntity<ResponseObject> blockOrEnableAccount(@PathVariable("id") ObjectId id,
             @RequestParam boolean is_active) {
         try {
@@ -167,6 +181,7 @@ public class UserAccountController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Delete user account", description = "Delete user account by ID")
     public ResponseEntity<ResponseObject> deleteUserAccount(@PathVariable("id") ObjectId id) {
         try {
             User userDelete = userAccountService.getUserById(id);
