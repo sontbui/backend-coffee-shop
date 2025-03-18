@@ -29,4 +29,6 @@ public interface IUserAccount {
     void deleteUserAccount(ObjectId id) throws Exception;
 
     void uploadAvatar(ObjectId id, String avatar) throws Exception;
+
+
 }

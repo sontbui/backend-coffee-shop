@@ -23,7 +23,9 @@ import java.util.Map;
 @RequestMapping("users")
 @Tag(name = "User", description = "User management APIs")
 public class UserAccountController {
+
     private final String FOLDER_USER_CLOUDINARY = "users";
+
     private final IUserAccount userAccountService;
     private final CloudinaryService cloudinaryService;
 
@@ -51,8 +53,10 @@ public class UserAccountController {
     public ResponseEntity<ResponseObject> uploadAvatar(@PathVariable("id") ObjectId id,
             @RequestParam("file") MultipartFile file) {
         try {
+            String deleteImageUrl = userAccountService.getUserById(id).getAvatar();
             String imageUrl = cloudinaryService.uploadImageToFolder(file, FOLDER_USER_CLOUDINARY);
             userAccountService.uploadAvatar(id, imageUrl);
+            cloudinaryService.deleteImage(deleteImageUrl);
             return ResponseEntity.ok(ResponseObject.builder()
                     .data(imageUrl)
                     .message("Avatar uploaded successfully")
@@ -65,6 +69,7 @@ public class UserAccountController {
                     .build());
         }
     }
+
     @PostMapping("/register")
     @Operation(summary = "Register new User", description = "Sign up new user account")
     public ResponseEntity<ResponseObject> registerUser(
