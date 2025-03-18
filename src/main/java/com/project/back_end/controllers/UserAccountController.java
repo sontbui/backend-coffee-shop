@@ -3,6 +3,7 @@ package com.project.back_end.controllers;
 import com.project.back_end.dtos.UserDTO;
 import com.project.back_end.models.User;
 import com.project.back_end.responses.ResponseObject;
+import com.project.back_end.services.cloudinary.CloudinaryService;
 import com.project.back_end.services.users.IUserAccount;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,19 +15,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/v1/users")
+@RequestMapping("users")
 @Tag(name = "User", description = "User management APIs")
 public class UserAccountController {
-
+    private final String FOLDER_USER_CLOUDINARY = "users";
     private final IUserAccount userAccountService;
+    private final CloudinaryService cloudinaryService;
 
     @Autowired
-    public UserAccountController(IUserAccount userAccountService) {
+    public UserAccountController(IUserAccount userAccountService, CloudinaryService cloudinaryService) {
         this.userAccountService = userAccountService;
+        this.cloudinaryService = cloudinaryService;
     }
 
     @GetMapping("/test-admin")
@@ -37,14 +41,34 @@ public class UserAccountController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-     @Operation(summary = "Get user by ID users", description = "Retrieve users by ID from database")
+    @Operation(summary = "Get user by ID users", description = "Retrieve users by ID from database")
     public User getUserById(@PathVariable ObjectId id) throws Exception {
         return userAccountService.getUserById(id);
     }
 
+    @PostMapping("/upload-avatar/{id}")
+    @Operation(summary = "Upload avatar", description = "Upload avatar by ID")
+    public ResponseEntity<ResponseObject> uploadAvatar(@PathVariable("id") ObjectId id,
+            @RequestParam("file") MultipartFile file) {
+        try {
+            String imageUrl = cloudinaryService.uploadImageToFolder(file, FOLDER_USER_CLOUDINARY);
+            userAccountService.uploadAvatar(id, imageUrl);
+            return ResponseEntity.ok(ResponseObject.builder()
+                    .data(imageUrl)
+                    .message("Avatar uploaded successfully")
+                    .status(HttpStatus.OK.toString())
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ResponseObject.builder()
+                    .message(e.getMessage())
+                    .status(HttpStatus.BAD_REQUEST.toString())
+                    .build());
+        }
+    }
     @PostMapping("/register")
     @Operation(summary = "Register new User", description = "Sign up new user account")
-    public ResponseEntity<ResponseObject> registerUser(@RequestBody UserDTO userAccountDTO) {
+    public ResponseEntity<ResponseObject> registerUser(
+            @RequestBody UserDTO userAccountDTO) {
         try {
             User newUser = userAccountService.createAccount(userAccountDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body(ResponseObject.builder()
@@ -161,7 +185,7 @@ public class UserAccountController {
 
     @PutMapping("/block/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    @Operation(summary = "Block or enable account", description = "Block or enable account by ID")  
+    @Operation(summary = "Block or enable account", description = "Block or enable account by ID")
     public ResponseEntity<ResponseObject> blockOrEnableAccount(@PathVariable("id") ObjectId id,
             @RequestParam boolean is_active) {
         try {

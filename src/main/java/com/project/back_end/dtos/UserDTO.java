@@ -1,5 +1,7 @@
 package com.project.back_end.dtos;
 
+import java.io.File;
+
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -31,6 +33,9 @@ public class UserDTO {
     @Field("name")
     private String fullName;
 
+    private String gender;
+
+    private String dob;
 
     @Field("phone")
     @JsonProperty("phone")
@@ -48,6 +53,8 @@ public class UserDTO {
     private String point;
 
     private String role;
+
+    private String avatar;
 
     @Field("is_active")
     private boolean isActive;

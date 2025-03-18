@@ -12,6 +12,7 @@
 /Users/sontbui/Documents/workspace/kotlin/back-end/src/main/java/com/project/back_end/models/Category.java
 /Users/sontbui/Documents/workspace/kotlin/back-end/src/main/java/com/project/back_end/models/User.java
 /Users/sontbui/Documents/workspace/kotlin/back-end/src/main/java/com/project/back_end/repositories/CategoryRepository.java
+/Users/sontbui/Documents/workspace/kotlin/back-end/src/main/java/com/project/back_end/repositories/CloudianryRepository.java
 /Users/sontbui/Documents/workspace/kotlin/back-end/src/main/java/com/project/back_end/repositories/UserRepository.java
 /Users/sontbui/Documents/workspace/kotlin/back-end/src/main/java/com/project/back_end/responses/ResponseObject.java
 /Users/sontbui/Documents/workspace/kotlin/back-end/src/main/java/com/project/back_end/responses/categories/CategoryResponse.java
