@@ -132,6 +132,8 @@ public class UserAccountService implements IUserAccount {
         User existingUserAccount = userAccountRepository.findById(id)
                 .orElseThrow(() -> new Exception("User not found"));
         existingUserAccount.setFullName(userAccountDTO.getFullName());
+        existingUserAccount.setGender(userAccountDTO.getGender());
+        existingUserAccount.setDob(userAccountDTO.getDob());
         existingUserAccount.setAddress(userAccountDTO.getAddress());
         existingUserAccount.setEmail(userAccountDTO.getEmail());
         existingUserAccount.setPhoneNumber(userAccountDTO.getPhoneNumber());
