@@ -6,6 +6,7 @@ import com.project.back_end.models.User;
 import com.project.back_end.repositories.CloudianryRepository;
 import com.project.back_end.repositories.UserRepository;
 import com.project.back_end.services.cloudinary.CloudinaryService;
+import com.project.back_end.utils.General;
 import com.project.back_end.utils.JwtTokenUtil;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +21,6 @@ import java.util.Optional;
 
 @Service
 public class UserAccountService implements IUserAccount {
-
-    private final String folderAvatar = "users";
-    private final String URL_AVATAR_DEFAULT_MALE = "https://res.cloudinary.com/dzw7jd4hi/image/upload/v1742306030/users/avatarDefaultMale.jpg";
-    private final String URL_AVATAR_DEFAULT_FEMALE = "https://res.cloudinary.com/dzw7jd4hi/image/upload/v1742306030/users/avatarDefaultFemale.jpg";
-    private final String URL_AVATAR_DEFAULT_LGBT = "https://res.cloudinary.com/dzw7jd4hi/image/upload/v1742306492/users/avatarDefaultLGBT.jpg";
 
     private final CloudianryRepository cloudianryRepository;
     private final CloudinaryService cloudinaryService;
@@ -59,11 +55,11 @@ public class UserAccountService implements IUserAccount {
                 (userAccountDTO.getAvatar()).toLowerCase().equals("null")) {
 
             if (userAccountDTO.getGender().equals("male")) {
-                userAccountDTO.setAvatar(URL_AVATAR_DEFAULT_MALE);
+                userAccountDTO.setAvatar(General.URL_AVATAR_DEFAULT_MALE);
             } else if (userAccountDTO.getGender().equals("female")) {
-                userAccountDTO.setAvatar(URL_AVATAR_DEFAULT_FEMALE);
+                userAccountDTO.setAvatar(General.URL_AVATAR_DEFAULT_FEMALE);
             } else {
-                userAccountDTO.setAvatar(URL_AVATAR_DEFAULT_LGBT);
+                userAccountDTO.setAvatar(General.URL_AVATAR_DEFAULT_LGBT);
             }
         }
         User userAccount = User.builder()
@@ -89,11 +85,15 @@ public class UserAccountService implements IUserAccount {
         if (!cloudianryRepository.isImage(avatar)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid image! Available for png | jpg | jpeg");
         }
+        if(!cloudianryRepository.existingImage(avatar)){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Image not found");
+        }
         User existingUserAccount = userAccountRepository.findById(id)
                 .orElseThrow(() -> new Exception("User not found."));
         existingUserAccount.setAvatar(avatar);
         userAccountRepository.save(existingUserAccount);
     }
+    
 
     @Override
     public String loginByPhoneNumber(String phoneNumber, String password) throws Exception {

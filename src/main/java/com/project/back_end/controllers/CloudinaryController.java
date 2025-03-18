@@ -75,4 +75,30 @@ public class CloudinaryController {
                     .build());
         }
     }
+
+
+    @Operation(summary = "Delete an image from cloudinary", description = "Delete an image from cloudinary.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Delete successful"),
+        @ApiResponse(responseCode = "400", description = "Invalid input data")
+    })
+    
+    @DeleteMapping("/delete")
+    public ResponseEntity<ResponseObject> deleteImage(
+            @RequestParam("imageUrl") String imageUrl
+            ) {
+        try {
+            cloudinaryService.deleteImage(imageUrl);
+            return ResponseEntity.ok(ResponseObject.builder()
+                    .message("Image deleted successfully")
+                    .status(String.valueOf(HttpStatus.SC_OK))
+                    .build());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.SC_BAD_REQUEST).body(ResponseObject.builder()
+                    .message(e.getMessage())
+                    .status(String.valueOf(HttpStatus.SC_BAD_REQUEST))
+                    .build());
+        }
+    }
+
 }
