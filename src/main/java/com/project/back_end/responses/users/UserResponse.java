@@ -22,6 +22,12 @@ public class UserResponse {
     @Field("name") //
     private String fullName;
 
+    @Field("gender")
+    private String gender;
+
+    @Field("dob")
+    private String dob;
+
     @Field("phone")
     private String phoneNumber;
 
@@ -31,6 +37,8 @@ public class UserResponse {
     private String address;
 
     private String password;
+
+    private String avatar;
 
     private int point;
 
@@ -50,10 +58,14 @@ public class UserResponse {
         System.out.println("Mapping UserAccount to Response: " + userAccount);
         return UserResponse.builder()
                 .id(userAccount.getId())
+                .fullName(userAccount.getFullName())
+                .address(userAccount.getAddress())
                 .phoneNumber(userAccount.getPhoneNumber())
                 .email(userAccount.getEmail())
                 .password(userAccount.getPassword())
                 .role(userAccount.getRole())
+                .point(userAccount.getPoint())
+                .avatar(userAccount.getAvatar())
                 .isActive(userAccount.isActive())
                 .createdAt(userAccount.getCreatedAt())
                 .updated_at(userAccount.getUpdated_at())

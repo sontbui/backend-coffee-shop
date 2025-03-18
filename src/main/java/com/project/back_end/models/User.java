@@ -23,6 +23,10 @@ public class User {
     @Field("name")
     private String fullName;
 
+    private String gender;
+
+    private String dob;
+
     @Field("phone")
     private String phoneNumber;
 
@@ -46,4 +50,7 @@ public class User {
 
     @Field("is_active")
     private boolean isActive;
+
+    @Field("avatar")
+    private String avatar;
 }

@@ -1,5 +1,7 @@
 package com.project.back_end.services.users;
 
+import java.io.File;
+
 import org.bson.types.ObjectId;
 import com.project.back_end.dtos.UserDTO;
 import com.project.back_end.models.User;
@@ -25,4 +27,6 @@ public interface IUserAccount {
     public void blockOrEnbleAccount(ObjectId id, boolean isActive) throws Exception;
     
     void deleteUserAccount(ObjectId id) throws Exception;
+
+    void uploadAvatar(ObjectId id, String avatar) throws Exception;
 }

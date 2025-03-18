@@ -1,8 +1,11 @@
 package com.project.back_end.services.users;
 
+import com.cloudinary.Cloudinary;
 import com.project.back_end.dtos.UserDTO;
 import com.project.back_end.models.User;
+import com.project.back_end.repositories.CloudianryRepository;
 import com.project.back_end.repositories.UserRepository;
+import com.project.back_end.services.cloudinary.CloudinaryService;
 import com.project.back_end.utils.JwtTokenUtil;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,20 +14,31 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.io.File;
 import java.time.Instant;
 import java.util.Optional;
 
 @Service
 public class UserAccountService implements IUserAccount {
 
+    private final String folderAvatar = "users";
+    private final String URL_AVATAR_DEFAULT_MALE = "https://res.cloudinary.com/dzw7jd4hi/image/upload/v1742306030/users/avatarDefaultMale.jpg";
+    private final String URL_AVATAR_DEFAULT_FEMALE = "https://res.cloudinary.com/dzw7jd4hi/image/upload/v1742306030/users/avatarDefaultFemale.jpg";
+    private final String URL_AVATAR_DEFAULT_LGBT = "https://res.cloudinary.com/dzw7jd4hi/image/upload/v1742306492/users/avatarDefaultLGBT.jpg";
+
+    private final CloudianryRepository cloudianryRepository;
+    private final CloudinaryService cloudinaryService;
     private final UserRepository userAccountRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenUtil jwtTokenUtil;
 
     @Autowired
-    public UserAccountService(UserRepository userAccountRepository, PasswordEncoder passwordEncoder,
-            JwtTokenUtil jwtTokenUtil) {
+    public UserAccountService(UserRepository userAccountRepository, CloudinaryService cloudinaryService,
+            PasswordEncoder passwordEncoder,
+            JwtTokenUtil jwtTokenUtil, CloudianryRepository cloudianryRepository) {
+        this.cloudianryRepository = cloudianryRepository;
         this.userAccountRepository = userAccountRepository;
+        this.cloudinaryService = cloudinaryService;
         this.passwordEncoder = passwordEncoder;
         this.jwtTokenUtil = jwtTokenUtil;
     }
@@ -39,8 +53,24 @@ public class UserAccountService implements IUserAccount {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
                     "User with this phone number already exists" + userAccountDTO.getPhoneNumber());
         }
+        if (userAccountDTO.getAvatar() == null ||
+                userAccountDTO.getAvatar().isEmpty() ||
+                userAccountDTO.getAvatar().isBlank() ||
+                (userAccountDTO.getAvatar()).toLowerCase().equals("null")) {
+
+            if (userAccountDTO.getGender().equals("male")) {
+                userAccountDTO.setAvatar(URL_AVATAR_DEFAULT_MALE);
+            } else if (userAccountDTO.getGender().equals("female")) {
+                userAccountDTO.setAvatar(URL_AVATAR_DEFAULT_FEMALE);
+            } else {
+                userAccountDTO.setAvatar(URL_AVATAR_DEFAULT_LGBT);
+            }
+        }
         User userAccount = User.builder()
                 .fullName(userAccountDTO.getFullName())
+                .gender(userAccountDTO.getGender())
+                .dob(userAccountDTO.getDob())
+                .avatar(userAccountDTO.getAvatar())
                 .email(userAccountDTO.getEmail())
                 .phoneNumber(userAccountDTO.getPhoneNumber())
                 .address(userAccountDTO.getAddress())
@@ -52,6 +82,17 @@ public class UserAccountService implements IUserAccount {
                 .isActive(true)
                 .build();
         return userAccountRepository.save(userAccount);
+    }
+
+    @Override
+    public void uploadAvatar(ObjectId id, String avatar) throws Exception {
+        if (!cloudianryRepository.isImage(avatar)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid image! Available for png | jpg | jpeg");
+        }
+        User existingUserAccount = userAccountRepository.findById(id)
+                .orElseThrow(() -> new Exception("User not found."));
+        existingUserAccount.setAvatar(avatar);
+        userAccountRepository.save(existingUserAccount);
     }
 
     @Override
